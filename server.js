@@ -92,3 +92,127 @@ function viewAllDepartments() {
     });
   }
   
+// Add a department
+function addDepartment() {
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'departmentName',
+        message: 'What is the name of the department?'
+      }
+    ]).then((answers) => {
+      db.query('INSERT INTO departments SET ?', { name: answers.departmentName }, (err, results) => {
+        if (err) throw err;
+        console.log('Department added.');
+        employeeTracker();
+      });
+    });
+  }
+  
+// Add a role
+function addRole() {
+    db.query('SELECT * FROM departments', (err, results) => {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: 'input',
+          name: 'roleTitle',
+          message: 'What is the title of the role?'
+        },
+        {
+          type: 'input',
+          name: 'roleSalary',
+          message: 'What is the salary of the role?'
+        },
+        {
+          type: 'list',
+          name: 'departmentId',
+          message: 'Which department does the role belong to?',
+          choices: results.map(department => ({ name: department.name, value: department.dept_id }))
+        }
+      ]).then((answers) => {
+        db.query('INSERT INTO roles SET ?', {
+          title: answers.roleTitle,
+          salary: answers.roleSalary,
+          dept_id: answers.departmentId
+        }, (err, results) => {
+          if (err) throw err;
+          console.log('Role added.');
+          employeeTracker();
+        });
+      });
+    });
+  }
+  
+  // Add an employee
+  function addEmployee() {
+    db.query('SELECT * FROM roles', (err, results) => {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: 'input',
+          name: 'firstName',
+          message: 'What is the employee\'s first name?'
+        },
+        {
+          type: 'input',
+          name: 'lastName',
+          message: 'What is the employee\'s last name?'
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: 'What is the employee\'s role?',
+          choices: results.map(role => ({ name: role.title, value: role.role_id }))
+        }
+      ]).then((answers) => {
+        db.query('SELECT * FROM employees', (err, results) => {
+          if (err) throw err;
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'managerId',
+              message: 'Who is the employee\'s manager?',
+              choices: [{ name: 'None', value: null }].concat(
+                results.map(employee => ({ name: employee.first_name + ' ' + employee.last_name, value: employee.emp_id }))
+              )
+            }
+          ]).then((managerAnswer) => {
+            db.query('INSERT INTO employees SET ?', {
+              first_name: answers.firstName,
+              last_name: answers.lastName,
+              role_id: answers.roleId,
+              manager_id: managerAnswer.managerId
+            }, (err, results) => {
+              if (err) throw err;
+              console.log('Employee added.');
+              employeeTracker();
+            });
+          });
+        });
+      });
+    });
+  }
+  
+//   // Update an employee role
+//   function updateEmployeeRole() {
+//     db.query('SELECT * FROM employees', (err, results) => {
+//       if (err) throw err;
+//       inquirer.prompt([
+//         {
+//           type: 'list',
+//           name: 'employeeId',
+//           message: 'Which employee\'s role do you want to update?',
+//           choices: results.map(employee => ({ name: employee.first_name + ' ' + employee.last_name, value: employee.emp_id }))
+//         }
+//       ]).then((employeeAnswer) => {
+//         db.query('SELECT * FROM roles', (err, results) => {
+//           if (err) throw err;
+//           inquirer.prompt([
+//             {
+//               type: 'list',
+//               name: 'roleId',
+//               message: 'What is the employee\'s new role?',
+//               choices: results.map(role => ({ name: role.title, value: role.role_id }))
+//             }
+  
