@@ -1,11 +1,7 @@
-const express = require('express');
-const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const mysql = require('mysql2');
 
-const app = express();
-const PORT = process.env.PORT || 3001;
-
-// Connect to database
+// Create a connection to the database
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -13,57 +9,60 @@ const db = mysql.createConnection({
   database: 'employeeDB'
 });
 
-// Test database connection
+// Connect to the database and start the application
 db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to database.');
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-// Define routes
-app.get('/', (req, res) => {
-  // Query database
-  db.query('SELECT * FROM employees', (err, results) => {
     if (err) throw err;
-    res.json(results);
+    console.log('Database connected.');
+    employeeTracker();
   });
-});
-
-app.post('/add-employee', (req, res) => {
-  // Use inquirer to get user input
-  inquirer.prompt([
-    {
-      type: 'input',
-      name: 'firstName',
-      message: 'Enter the employee\'s first name:'
-    },
-    {
-      type: 'input',
-      name: 'lastName',
-      message: 'Enter the employee\'s last name:'
-    },
-    {
-      type: 'input',
-      name: 'role',
-      message: 'Enter the employee\'s role ID:'
-    },
-    {
-      type: 'input',
-      name: 'manager',
-      message: 'Enter the employee\'s manager ID:'
-    }
-  ]).then((answers) => {
-    // Insert new employee into database
-    const { firstName, lastName, role, manager } = answers;
-    const query = 'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)';
-    db.query(query, [firstName, lastName, role, manager], (err, results) => {
-      if (err) throw err;
-      res.json(results);
+  
+  // Main application function
+function employeeTracker() {
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'prompt',
+        message: 'What would you like to do?',
+        choices: [
+          'View All Departments',
+          'View All Roles',
+          'View All Employees',
+          'Add A Department',
+          'Add A Role',
+          'Add An Employee',
+          'Update An Employee Role',
+          'Log Out'
+        ]
+      }
+    ]).then((answers) => {
+      switch (answers.prompt) {
+        case 'View All Departments':
+          viewAllDepartments();
+          break;
+        case 'View All Roles':
+          viewAllRoles();
+          break;
+        case 'View All Employees':
+          viewAllEmployees();
+          break;
+        case 'Add A Department':
+          addDepartment();
+          break;
+        case 'Add A Role':
+          addRole();
+          break;
+        case 'Add An Employee':
+          addEmployee();
+          break;
+        case 'Update An Employee Role':
+          updateEmployeeRole();
+          break;
+        case 'Log Out':
+          console.log('Goodbye!');
+          db.end();
+          break;
+      }
     });
-  });
-});
-
+  }
+  
+  
