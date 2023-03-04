@@ -248,3 +248,24 @@ function updateEmployeeRole() {
     });
   }
   
+  // Remove an employee
+function removeEmployee() {
+    db.query('SELECT * FROM employees', (err, results) => {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'employeeId',
+          message: 'Which employee do you want to remove?',
+          choices: results.map(employee => ({ name: employee.first_name + ' ' + employee.last_name, value: employee.emp_id }))
+        }
+      ]).then((answers) => {
+        db.query('DELETE FROM employees WHERE ?', { emp_id: answers.employeeId }, (err, results) => {
+          if (err) throw err;
+          console.log('Employee removed.');
+          employeeTracker();
+        });
+      });
+    });
+  }
+  
