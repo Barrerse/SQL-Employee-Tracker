@@ -75,6 +75,9 @@ See an example of the application working:
 ![Employee Tracker Demo](https://youtu.be/7D_YrpfXxZ8)
 
 
+![SQLEmployeeTracker_demo](https://user-images.githubusercontent.com/108836644/222936112-a883881f-800a-421d-9971-db5ed5125438.gif)
+
+
 
 ## License
 
