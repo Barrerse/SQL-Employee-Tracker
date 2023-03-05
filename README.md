@@ -68,11 +68,11 @@ Select an option by entering the corresponding number.
 
 ## Video 
 
-![Video_Example](https://link.to.your.video/preview.gif)
+![Video_Example](https://youtu.be/7D_YrpfXxZ8/preview.gif)
 
 See an example of the application working:
 
-![Employee Tracker Demo](https://example.com/employee-tracker-demo.gif)
+![Employee Tracker Demo](https://youtu.be/7D_YrpfXxZ8)
 
 
 
