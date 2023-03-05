@@ -18,7 +18,6 @@ To install the necessary dependencies, run:
 
 ```
 npm install
-
 ```
 
 Create a .env file in the root directory of your project and update it with your MySQL username and password.
@@ -29,7 +28,6 @@ DB_PASSWORD=password
 DB_NAME=employee_trackerDB
 DB_HOST=localhost
 DB_PORT=3306
-
 ```
 
 
@@ -39,7 +37,6 @@ To start the application, run:
 
 ```
 node server.js
-
 ```
 
 You will be presented with the following options:
@@ -64,3 +61,21 @@ Select an option by entering the corresponding number.
 - **Add an employee**: This option will prompt you to enter the employee's first name, last name, role, and manager. Once you enter the employee information, it will be added to the database.
 - **Update an employee role**: This option will prompt you to select an employee to update and their new role. Once you enter the updated information, it will be updated in the database.
 
+## Screenshots 
+
+![1](https://user-images.githubusercontent.com/108836644/222935960-6bf7dcf7-82ab-447a-a1b8-94b622678405.PNG)
+
+
+## Video 
+
+![Video_Example](https://link.to.your.video/preview.gif)
+
+See an example of the application working:
+
+![Employee Tracker Demo](https://example.com/employee-tracker-demo.gif)
+
+
+
+## License
+
+MIT 
